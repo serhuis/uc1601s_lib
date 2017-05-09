@@ -35,7 +35,7 @@ void TIM2_IRQHandler(void) {
   TIM_ClearITPendingBit(TIM2, TIM_SR_UIF );
 
   // Some LCD demonstrations
-  LCD_clear(0);
+  LCD_clear();
   switch (i++ % 7) {
     case 0:
       LCD_string("10x15", 0, 0, FONT_TYPE_10x15, INVERSE_TYPE_NOINVERSE);

@@ -1,11 +1,11 @@
 .\objects\i2c.o: src\i2c.c
+.\objects\i2c.o: src\inc/i2c.h
 .\objects\i2c.o: d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include\stm32f10x.h
-.\objects\i2c.o: E:\MY_Proj\STM32_uc1601s\RTE\RTE_Components.h
-.\objects\i2c.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cm3.h
+.\objects\i2c.o: D:\proj\STM32_lcd_uc1601s\RTE\RTE_Components.h
+.\objects\i2c.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\core_cm3.h
 .\objects\i2c.o: d:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
-.\objects\i2c.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmInstr.h
-.\objects\i2c.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\cmsis_armcc.h
-.\objects\i2c.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include\core_cmFunc.h
+.\objects\i2c.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_compiler.h
+.\objects\i2c.o: d:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include\cmsis_armcc.h
 .\objects\i2c.o: d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include\system_stm32f10x.h
 .\objects\i2c.o: .\src\inc\stm32f10x_conf.h
 .\objects\i2c.o: d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\StdPeriph_Driver\inc\stm32f10x_adc.h
@@ -32,4 +32,3 @@
 .\objects\i2c.o: d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\StdPeriph_Driver\inc\stm32f10x_usart.h
 .\objects\i2c.o: d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\StdPeriph_Driver\inc\stm32f10x_wwdg.h
 .\objects\i2c.o: d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\StdPeriph_Driver\inc\misc.h
-.\objects\i2c.o: src\inc/i2c.h

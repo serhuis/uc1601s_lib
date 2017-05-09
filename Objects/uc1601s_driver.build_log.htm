@@ -5,7 +5,7 @@
 <h2>Tool Versions:</h2>
 IDE-Version: µVision V5.20.0.0
 Copyright (C) 2016 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: serhiy Àäìèíèñòðàòîð,  , LIC=V859U-S8GRN-05ZTY-I0FHN-66JJA-CGQDK
+License Information: serhuis s, asdfghj, LIC=V859U-S1VIJ-49NG2-9BP0Y-ST45K-LM3B9
  
 Tool Versions:
 Toolchain:       MDK-ARM Professional  Version: 5.20
@@ -17,122 +17,107 @@ Library Manager: ArmAr.exe V5.06 update 2 (build 183)
 Hex Converter:   FromElf.exe V5.06 update 2 (build 183)
 CPU DLL:         SARMCM3.DLL V5.20
 Dialog DLL:      DCM.DLL V1.13.7.0
-Target DLL:      UL2CM3.DLL V1.157.18.0
+Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V2.0.18.0
 Dialog DLL:      TCM.DLL V1.14.9.0
  
 <h2>Project:</h2>
-E:\MY_Proj\STM32_uc1601s\uc1601s_driver.uvprojx
+D:\proj\STM32_lcd_uc1601s\uc1601s_driver.uvprojx
 Project File Date:  05/09/2017
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 2 (build 183)', folder: 'd:\Keil_v5\ARM\ARMCC\Bin'
 Rebuild target 'Target 1'
-compiling main.c...
-compiling tools.c...
 compiling i2c.c...
 src\i2c.c(369): warning:  #111-D: statement is unreachable
         return 1;
 src\i2c.c(387): warning:  #111-D: statement is unreachable
-      	return 1;
+        return 1;
 src\i2c.c: 2 warnings, 0 errors
-assembling startup_stm32f10x_md_vl.s...
+compiling main.c...
+compiling tools.c...
 compiling uc1601s.c...
-src\uc1601s.c(272): warning:  #68-D: integer conversion resulted in a change of sign
+src\uc1601s.c(299): warning:  #68-D: integer conversion resulted in a change of sign
       ystep = -1;
-src\uc1601s.c(431): warning:  #68-D: integer conversion resulted in a change of sign
+src\uc1601s.c(458): warning:  #68-D: integer conversion resulted in a change of sign
           ystep = -1;
-src\uc1601s.c(763): error:  #65: expected a ";"
-      I2C_WrBuf(0x70 | 2, buff, sizeof(buf));
-src\uc1601s.c(762): warning:  #177-D: variable "buff" was declared but never referenced
-  		uint8_t buff[4]
-src\uc1601s.c(767): error:  #253: expected a ","
-      uint8_t buf[] = { 0b10001001 };
-src\uc1601s.c(788): error:  #253: expected a ","
-      uint8_t buf[] = { 0b10110000 | y, x & 0b00001111, (x >> 4) | 0b00010000 };
-src\uc1601s.c(788): error:  #28: expression must have a constant value
-      uint8_t buf[] = { 0b10110000 | y, x & 0b00001111, (x >> 4) | 0b00010000 };
-src\uc1601s.c(788): error:  #253: expected a ","
-      uint8_t buf[] = { 0b10110000 | y, x & 0b00001111, (x >> 4) | 0b00010000 };
-src\uc1601s.c(788): error:  #28: expression must have a constant value
-      uint8_t buf[] = { 0b10110000 | y, x & 0b00001111, (x >> 4) | 0b00010000 };
-src\uc1601s.c(788): error:  #253: expected a ","
-      uint8_t buf[] = { 0b10110000 | y, x & 0b00001111, (x >> 4) | 0b00010000 };
-src\uc1601s.c: 3 warnings, 7 errors
-compiling system_stm32f10x.c...
+src\uc1601s.c: 2 warnings, 0 errors
 compiling misc.c...
 compiling stm32f10x_gpio.c...
 compiling stm32f10x_i2c.c...
 compiling stm32f10x_rcc.c...
-compiling GPIO_STM32F10x.c...
 compiling stm32f10x_tim.c...
-".\Objects\uc1601s_driver.axf" - 7 Error(s), 5 Warning(s).
+compiling GPIO_STM32F10x.c...
+assembling startup_stm32f10x_cl.s...
+compiling system_stm32f10x.c...
+linking...
+Program Size: Code=6180 RO-data=1488 RW-data=44 ZI-data=1636  
+".\Objects\uc1601s_driver.axf" - 0 Error(s), 4 Warning(s).
 
 <h2>Software Packages used:</h2>
 
 Package Vendor: ARM
-                http://www.keil.com/pack/ARM.CMSIS.4.5.0.pack
-                ARM::CMSIS:CORE:4.3.0
+                http://www.keil.com/pack/ARM.CMSIS.5.0.0.pack
+                ARM::CMSIS:CORE:5.0.0
                 CMSIS (Cortex Microcontroller Software Interface Standard)
-   * Component: CORE Version: 4.3.0
+   * Component: CORE Version: 5.0.0
 
 Package Vendor: Keil
                 http://www.keil.com/pack/Keil.STM32F1xx_DFP.2.1.0.pack
-                Keil::Device:StdPeriph Drivers:I2C:3.5.0
+                Keil::Device:Startup:1.0.0
                 STMicroelectronics STM32F1 Series Device Support, Drivers and Examples
-   * Component: I2C Version: 3.5.0
-   * Component: TIM Version: 3.5.0
-   * Component: GPIO Version: 3.5.0
-   * Component: RCC Version: 3.5.0
-   * Component: GPIO Version: 1.2
    * Component: Startup Version: 1.0.0
+   * Component: GPIO Version: 3.5.0
+   * Component: GPIO Version: 1.2
+   * Component: TIM Version: 3.5.0
    * Component: Framework Version: 3.5.1
+   * Component: RCC Version: 3.5.0
+   * Component: I2C Version: 3.5.0
 
 <h2>Collection of Component include folders:</h2>
-  E:\MY_Proj\STM32_uc1601s\RTE
-  E:\MY_Proj\STM32_uc1601s\RTE\Device\STM32F100RB
-  d:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include
+  D:\proj\STM32_lcd_uc1601s\RTE
+  D:\proj\STM32_lcd_uc1601s\RTE\Device\STM32F105RC
+  d:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include
   d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include
   d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\StdPeriph_Driver\inc
   d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\RTE_Driver
 
 <h2>Collection of Component Files used:</h2>
 
-   * Component: ARM::CMSIS:CORE:4.3.0
+   * Component: ARM::CMSIS:CORE:5.0.0
 
-   * Component: Keil::Device:StdPeriph Drivers:I2C:3.5.0
-      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_i2c.h
-      Source file:   Device\StdPeriph_Driver\src\stm32f10x_i2c.c
-
-   * Component: Keil::Device:StdPeriph Drivers:TIM:3.5.0
-      Source file:   Device\StdPeriph_Driver\src\stm32f10x_tim.c
-      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_tim.h
+   * Component: Keil::Device:Startup:1.0.0
+      Source file:   Device\Source\system_stm32f10x.c
+      Include file:  RTE_Driver\Config\RTE_Device.h
+      Source file:   Device\Source\ARM\startup_stm32f10x_cl.s
+      Source file:   Device\Source\ARM\STM32F1xx_OPT.s
 
    * Component: Keil::Device:StdPeriph Drivers:GPIO:3.5.0
-      Source file:   Device\StdPeriph_Driver\src\stm32f10x_gpio.c
       Include file:  Device\StdPeriph_Driver\inc\stm32f10x_gpio.h
-
-   * Component: Keil::Device:StdPeriph Drivers:RCC:3.5.0
-      Source file:   Device\StdPeriph_Driver\src\stm32f10x_rcc.c
-      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_rcc.h
+      Source file:   Device\StdPeriph_Driver\src\stm32f10x_gpio.c
 
    * Component: Keil::Device:GPIO:1.2
       Source file:   RTE_Driver\GPIO_STM32F10x.c
       Include file:  RTE_Driver\GPIO_STM32F10x.h
 
-   * Component: Keil::Device:Startup:1.0.0
-      Source file:   Device\Source\ARM\STM32F1xx_OPT.s
-      Source file:   Device\Source\system_stm32f10x.c
-      Include file:  RTE_Driver\Config\RTE_Device.h
-      Source file:   Device\Source\ARM\startup_stm32f10x_md_vl.s
+   * Component: Keil::Device:StdPeriph Drivers:TIM:3.5.0
+      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_tim.h
+      Source file:   Device\StdPeriph_Driver\src\stm32f10x_tim.c
 
    * Component: Keil::Device:StdPeriph Drivers:Framework:3.5.1
       Include file:  Device\StdPeriph_Driver\inc\misc.h
-      Source file:   Device\StdPeriph_Driver\src\misc.c
       Source file:   Device\StdPeriph_Driver\templates\stm32f10x_conf.h
+      Source file:   Device\StdPeriph_Driver\src\misc.c
       Include file:  Device\StdPeriph_Driver\templates\stm32f10x_it.h
       Source file:   Device\StdPeriph_Driver\templates\stm32f10x_it.c
-Target not created.
-Build Time Elapsed:  00:00:02
+
+   * Component: Keil::Device:StdPeriph Drivers:RCC:3.5.0
+      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_rcc.h
+      Source file:   Device\StdPeriph_Driver\src\stm32f10x_rcc.c
+
+   * Component: Keil::Device:StdPeriph Drivers:I2C:3.5.0
+      Include file:  Device\StdPeriph_Driver\inc\stm32f10x_i2c.h
+      Source file:   Device\StdPeriph_Driver\src\stm32f10x_i2c.c
+Build Time Elapsed:  00:01:04
 </pre>
 </body>
 </html>

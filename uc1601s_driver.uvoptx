@@ -26,7 +26,7 @@
     <ToolsetNumber>0x4</ToolsetNumber>
     <ToolsetName>ARM-ADS</ToolsetName>
     <TargetOption>
-      <CLKADS>12000000</CLKADS>
+      <CLKADS>8000000</CLKADS>
       <OPTTT>
         <gFlags>1</gFlags>
         <BeepAtEnd>1</BeepAtEnd>
@@ -78,6 +78,33 @@
         <IsCurrentTarget>1</IsCurrentTarget>
       </OPTFL>
       <CpuCode>18</CpuCode>
+      <Books>
+        <Book>
+          <Number>0</Number>
+          <Title>Quick Start Guide (MCBSTM32C)</Title>
+          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Documents\STM32C_QSG.pdf</Path>
+        </Book>
+        <Book>
+          <Number>1</Number>
+          <Title>Base Board Schematics (MCBSTM32C)</Title>
+          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Documents\mcbstm32c-base-board-schematics.pdf</Path>
+        </Book>
+        <Book>
+          <Number>2</Number>
+          <Title>Display Board Schematics (MCBSTM32C)</Title>
+          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Documents\mcbstm32c-display-board-schematics.pdf</Path>
+        </Book>
+        <Book>
+          <Number>3</Number>
+          <Title>User Manual (MCBSTM32C)</Title>
+          <Path>d:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\2.1.0\Documents\mcbstm32c.chm</Path>
+        </Book>
+        <Book>
+          <Number>4</Number>
+          <Title>MCBSTM32C Evaluation Board Web Page (MCBSTM32C)</Title>
+          <Path>http://www.keil.com/mcbstm32c/</Path>
+        </Book>
+      </Books>
       <DebugOpt>
         <uSim>0</uSim>
         <uTrg>1</uTrg>
@@ -100,7 +127,7 @@
         <tRSysVw>1</tRSysVw>
         <sRunDeb>0</sRunDeb>
         <sLrtime>0</sLrtime>
-        <nTsel>0</nTsel>
+        <nTsel>5</nTsel>
         <sDll></sDll>
         <sDllPa></sDllPa>
         <sDlgDll></sDlgDll>
@@ -111,16 +138,38 @@
         <tDlgDll></tDlgDll>
         <tDlgPa></tDlgPa>
         <tIfile></tIfile>
-        <pMon>BIN\UL2CM3.DLL</pMon>
+        <pMon>STLink\ST-LINKIII-KEIL_SWO.dll</pMon>
       </DebugOpt>
       <TargetDriverDllRegistry>
         <SetRegEntry>
           <Number>0</Number>
+          <Key>ST-LINKIII-KEIL_SWO</Key>
+          <Name>-UST-Link/V1_on_F: -O206 -S0 -C0 -A0 -TO18 -TC10000000 -TP21 -TDS8004 -TDT0 -TDC1F -TIEFFFFFFFF -TIP8 -FO7 -FD20000000 -FC1000 -FN1 -FF0STM32F10x_CL.FLM -FS08000000 -FL080000 -FP0($$Device:STM32F105RC$Flash\STM32F10x_CL.FLM)</Name>
+        </SetRegEntry>
+        <SetRegEntry>
+          <Number>0</Number>
           <Key>UL2CM3</Key>
-          <Name>UL2CM3(-S0 -C0 -P0 -FD20000000 -FC1000 -FN1 -FF0STM32F10x_128 -FS08000000 -FL020000 -FP0($$Device:STM32F100RB$Flash\STM32F10x_128.FLM))</Name>
+          <Name>UL2CM3(-S0 -C0 -P0 )  -FN1 -FC1000 -FD20000000 -FF0STM32F10x_CL -FL080000 -FS08000000 -FP0($$Device:STM32F105RC$Flash\STM32F10x_CL.FLM)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint/>
+      <Breakpoint>
+        <Bp>
+          <Number>0</Number>
+          <Type>0</Type>
+          <LineNumber>4</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>src\inc/i2c.h</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+      </Breakpoint>
       <Tracepoint>
         <THDelay>0</THDelay>
       </Tracepoint>
@@ -211,7 +260,7 @@
       <GroupNumber>1</GroupNumber>
       <FileNumber>4</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
       <PathWithFileName>.\src\uc1601s.c</PathWithFileName>

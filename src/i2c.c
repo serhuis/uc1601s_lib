@@ -1,4 +1,3 @@
-#include "stm32f10x.h"
 #include "inc/i2c.h"
 
 //Internal functions
@@ -86,13 +85,13 @@ void I2C_LowLevel_DeInit(void) {
  * @param cnt
  * @return
  */
-uint32_t I2C_WrBuf(uint8_t DevAddr, uint8_t *buf, uint32_t cnt) {
-
+uint32_t I2C_WrBuf(uint8_t DataCmd, uint8_t *buf, uint32_t cnt) {
   //Generate a Start condition
   I2C_Start();
 
   //Send I2C device Address
-  I2C_Addr(DevAddr, I2C_Direction_Transmitter);
+//  I2C_Addr(DevAddr, I2C_Direction_Transmitter);
+	I2C_Addr(0x70 | DataCmd, I2C_Direction_Transmitter);
   //Unstretch the clock by just reading SR2 (Physically the clock is continued to be strectehed because we have not written anything to the DR yet.)
   (void) I2Cx->SR2;
 
@@ -114,6 +113,7 @@ uint32_t I2C_WrBuf(uint8_t DevAddr, uint8_t *buf, uint32_t cnt) {
 
   return 0;
 }
+
 
 /**
  * The easy read.

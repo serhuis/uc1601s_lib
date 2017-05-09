@@ -3,6 +3,14 @@
 #include "inc/i2c.h"
 #include "inc/tools.h"
 
+
+//
+enum _lcd_datatype
+{
+	LcdCmd = 0,
+	LcdData = 2,
+}lcdBufType;
+
 //set column address (duoble-byte command)
 #define SET_COL_ADDR_LSB(col_addr_lsb)	0x00 | col_addr_lsb			// + column address CA[3:0] in bits [3:0]
 #define SET_COL_ADDR_MSB(col_addr_msb)	0x10 | col_addr_msb			// + column address CA[7:4] in bits [3:0]
@@ -87,6 +95,8 @@ const char chargen[];
 void LCD_init(void)
 {
   GPIO_InitTypeDef gpio_port;
+	uint8_t lcdBuff[5] = {0};
+	
 	
   //Init reset pin (PC0)
   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
@@ -113,64 +123,87 @@ void LCD_init(void)
     //Set VBIAS Potentiometer (double-byte command) 120
     //Mirror X SEG/Column sequence inversion ON
     //Display On
-    uint8_t buf[] =
-//    { 0b11101011, 0b10000001, 120, 0b11000010, 0b10101111};
-		{SET_BIAS_RATIO_9, SET_BIAS_POT, 120, SET_MAPPING_CONTROL(MIRROR_X, 0), SET_DISPL_ENABLE};
-    I2C_WrBuf(0x70, buf, sizeof(buf));
+//    uint8_t buf[] ={ 0b11101011, 0b10000001, 120, 0b11000010, 0b10101111};
+		lcdBuff[0] = SET_BIAS_RATIO_9;
+		lcdBuff[1] = SET_BIAS_POT;
+		lcdBuff[2] = 120;
+		lcdBuff[3] = SET_MAPPING_CONTROL(MIRROR_X, 0);
+		lcdBuff[4] = SET_DISPL_ENABLE;
+    I2C_WrBuf(LcdCmd, lcdBuff, sizeof(lcdBuff));
   }
 #else
   {
     // same as for LCD154 but with Mirror X SEG/Column sequence inversion OFF
 //    uint8_t buf[] = { 0b11101011, 0b10000001, 120, 0b11000000, 0b10101111 };
-		uint8_t buf[] = {SET_BIAS_RATIO_9, SET_BIAS_POT, 120, SET_MAPPING_CONTROL(0, 0), SET_DISPL_ENABLE};
-    I2C_WrBuf(0x70, buf, sizeof(buf));
+		lcdBuff[0] = SET_BIAS_RATIO_9;
+		lcdBuff[1] = SET_BIAS_POT;
+		lcdBuff[2] = 120;
+		lcdBuff[3] = SET_MAPPING_CONTROL(0, 0);
+		lcdBuff[4] = SET_DISPL_ENABLE;
+    I2C_WrBuf(LcdCmd, lcdBuff, sizeof(lcdBuff));
   }
 #endif
 
-  LCD_clear(0);
+  LCD_clear();
 }
 
 /**
  * Clear display
+ */
+void LCD_clear(void)
+{
+	uint16_t j;
+	uint8_t lcdBuff[] = {SET_PAGE_ADDR(0), 
+												SET_COL_ADDR_LSB(0),
+												SET_COL_ADDR_MSB(0)};
+
+	I2C_WrBuf(LcdCmd, lcdBuff, sizeof(lcdBuff));
+	
+	lcdBuff[0] = 0;
+  for (j = 0; j < 1056; j++){
+		I2C_WrBuf(LcdData, lcdBuff, 1);
+	}
+	
+}
+
+/**
+ * Fill display
  * @param type: 0 - white, 1 - black, 2 - gray 50%
  */
-void LCD_clear(uint8_t type)
+void LCD_fill(uint8_t type)
 {
   uint16_t j;
-  {
-    // Set Page Address 0, Set Column Address LSB, Set Column Address MSB
-    uint8_t buf[] = 
-//									{ 0b10110000, 0b00000000, 0b00010000 };
-								{SET_PAGE_ADDR(0), SET_COL_ADDR_LSB(0), SET_COL_ADDR_MSB(0)};
-		
-    I2C_WrBuf(0x70, buf, sizeof(buf));
-  }
+	uint8_t lcdBuff[] = {SET_PAGE_ADDR(0), SET_COL_ADDR_LSB(0), SET_COL_ADDR_MSB(0)};
+	
+  I2C_WrBuf(LcdCmd, lcdBuff, sizeof(lcdBuff));
 
   if (type == 0)
   {
-    uint8_t buf[] = {0};
+    lcdBuff[0] = 0;
     for (j = 0; j < 1056; j++)
     {
-      I2C_WrBuf(0x70 | 2, buf, sizeof(buf));
+      I2C_WrBuf(LcdData, lcdBuff, 0);
     }
   }
   else if (type == 1)
   {
-    uint8_t buf[] = {0xFF};
+    lcdBuff[0] = 0xFF;
     for (j = 0; j < 1056; j++)
     {
-      I2C_WrBuf(0x70 | 2, buf, sizeof(buf));
+      I2C_WrBuf(LcdData, lcdBuff, 1);
     }
   }
   else
   {
-    uint8_t buf[] = { 0xAA, 0x55 };
+    lcdBuff[0] = 0xAA;
+		lcdBuff[1] = 0x55;
     for (j = 0; j < 528; j++)
     {
-      I2C_WrBuf(0x70 | 2, buf, sizeof(buf));
+      I2C_WrBuf(LcdData, lcdBuff, 2);
     }
   }
 }
+
 
 /**
  * Plot pixel
@@ -182,24 +215,20 @@ void LCD_pixel(uint8_t pixel_type, uint8_t x, uint8_t y)
 {
 
   uint8_t page, page_num, bit_num;
-	uint8_t buf[3];
+	uint8_t lcdBuff[3] = {0};
 
   bit_num = y % 8; // bit number in page, which need be modified
   page_num = y / 8; // page number
 
   // set cursor
-  {
-    // setup page, Set Column Address LSB,  Set Column Address MSB
-//    uint8_t buf[] = { 0b10110000 | page_num, x & 0b00001111, (x >> 4) | 0b00010000 };
-    buf[0] =  SET_PAGE_ADDR(page_num);
-		buf[1] = SET_COL_ADDR_LSB(x & 0x0f);
-		buf[2] = SET_COL_ADDR_MSB(x >> 4);
+  lcdBuff[0] =  SET_PAGE_ADDR(page_num);
+	lcdBuff[1] = SET_COL_ADDR_LSB(x & 0x0f);
+	lcdBuff[2] = SET_COL_ADDR_MSB(x >> 4);
+		
+  I2C_WrBuf(LcdCmd, lcdBuff, sizeof(lcdBuff));
 
-		I2C_WrBuf(0x70, buf, sizeof(buf));
-  }
-
-  I2C_RdBuf(0x70 | 2, &page, sizeof(page)); //fake read
-  I2C_RdBuf(0x70 | 2, &page, sizeof(page)); //read background
+  I2C_RdBuf(LcdData, &page, sizeof(page)); //fake read
+  I2C_RdBuf(LcdData, &page, sizeof(page)); //read background
 
   // modify
   if (pixel_type)
@@ -212,18 +241,16 @@ void LCD_pixel(uint8_t pixel_type, uint8_t x, uint8_t y)
   }
 
   // set cursor again (it was moved during reading)
-  {
-    // setup page, Set Column Address LSB,  Set Column Address MSB
-//    uint8_t buf[] = { 0b10110000 | page_num, x & 0b00001111, (x >> 4) | 0b00010000 };
-    buf[0] =  SET_PAGE_ADDR(page_num);
-		buf[1] = SET_COL_ADDR_LSB(x & 0x0f);
-		buf[2] = SET_COL_ADDR_MSB(x >> 4);
+  // setup page, Set Column Address LSB,  Set Column Address MSB
+	//    uint8_t buf[] = { 0b10110000 | page_num, x & 0b00001111, (x >> 4) | 0b00010000 };
+  lcdBuff[0] =  SET_PAGE_ADDR(page_num);
+	lcdBuff[1] = SET_COL_ADDR_LSB(x & 0x0f);
+	lcdBuff[2] = SET_COL_ADDR_MSB(x >> 4);
 		
-    I2C_WrBuf(0x70, buf, sizeof(buf));
-  }
+  I2C_WrBuf(LcdCmd, lcdBuff, sizeof(lcdBuff));
 
   // write page again
-  I2C_WrBuf(0x70 | 2, &page, sizeof(page));
+  I2C_WrBuf(LcdData, &page, sizeof(page));
 }
 
 /**
@@ -513,10 +540,9 @@ void LCD_string(char *str, uint8_t x, uint8_t y, font_type font,
  */
 void LCD_symbol(char code, uint8_t width, uint8_t height, inverse_type inverse)
 {
+	uint8_t lcdBuff[4] = {0};
   uint8_t vert_offset, b, a, c, z, widthf, heightf;
-
   uint32_t buf, fon, vline, mask, mask1, mask2;
-
   uint16_t chargen_index = (code - 0x20) * 5; // character generator(chargen) consists of symbols strating
   //from 0x20 symbol (space). 5 - count of bytes, that determinate char:
   // each byte is vertical pixels(at total 5x8 pixels for one character)
@@ -587,31 +613,27 @@ void LCD_symbol(char code, uint8_t width, uint8_t height, inverse_type inverse)
     {
       if (cursorX > 131) // out of display 131
       {
-		//        uint8_t buf[] = { 0b10001001 }; // move by column +
-				uint8_t buf[] = {SET_RAM_ADDR_CTRL(WRAP_AROUND,INC_COL_FIRST,PAGE_INC_DIR_NORMAL)}; // move by column +
-        I2C_WrBuf(0x70, buf, sizeof(buf));
-
+				lcdBuff[0] = SET_RAM_ADDR_CTRL(WRAP_AROUND,INC_COL_FIRST,PAGE_INC_DIR_NORMAL);
+        I2C_WrBuf(LcdCmd, lcdBuff, 1);
         return;
       }
       LCD_cursor(cursorX, cursorY);
       // read all column (4 page)
-      {
-//        uint8_t buf[] = { 0b10001011 }; // move by page +
-				uint8_t buf[] = { SET_RAM_ADDR_CTRL(WRAP_AROUND,INC_PAGE_FIRST,PAGE_INC_DIR_NORMAL) }; // move by page +
-        I2C_WrBuf(0x70, buf, sizeof(buf));
-      }
+			lcdBuff[0] = SET_RAM_ADDR_CTRL(WRAP_AROUND,INC_PAGE_FIRST,PAGE_INC_DIR_NORMAL);
+			I2C_WrBuf(LcdCmd, lcdBuff, 1);
+
 
       //read all display column (32 bit)
       {
         uint8_t buf[6]; //0-th byte and 5-fth are fake
-        I2C_RdBuf(0x70 | 2, buf, sizeof(buf));
+        I2C_RdBuf(LcdData, buf, sizeof(buf));
 
-        fon = buf[4];
-        fon = fon << 8;
+				fon = buf[4];
+        fon <<= 8;
         fon += buf[3];
-        fon = fon << 8;
+        fon <<= 8;
         fon += buf[2];
-        fon = fon << 8;
+        fon <<= 8;
         fon += buf[1];
       }
 
@@ -621,7 +643,7 @@ void LCD_symbol(char code, uint8_t width, uint8_t height, inverse_type inverse)
         if (heightf == 0)
         {
 //          mask = 0b11111111 11111111 11111111 00000000;
-						mask = 0xFFFFFFF0;
+						mask = 0xFFFFFF00;
 					
         }
         else
@@ -664,7 +686,7 @@ void LCD_symbol(char code, uint8_t width, uint8_t height, inverse_type inverse)
       {
 //        uint8_t buf[] = { 0b10001011 }; // move by page +
 				uint8_t buf[] = { SET_RAM_ADDR_CTRL(WRAP_AROUND,INC_PAGE_FIRST,PAGE_INC_DIR_NORMAL) }; // move by page +
-        I2C_WrBuf(0x70, buf, sizeof(buf));
+        I2C_WrBuf(LcdCmd, buf, sizeof(buf));
       }
 
       {
@@ -690,7 +712,7 @@ void LCD_symbol(char code, uint8_t width, uint8_t height, inverse_type inverse)
 
   {
     uint8_t buf[6];
-    I2C_RdBuf(0x70 | 2, buf, sizeof(buf));
+    I2C_RdBuf(LcdData, buf, sizeof(buf));
 
     fon = buf[4];
     fon = fon << 8;
@@ -706,12 +728,10 @@ void LCD_symbol(char code, uint8_t width, uint8_t height, inverse_type inverse)
   {
     if (heightf == 0)
     {
-//      mask = 0b11111111111111111111111100000000;
 			mask = 0xFFFFFF00;
     }
     else
     {
-//      mask = 0b11111111111111110000000000000000;
 			mask = 0xFFFF0000;
     }
 
@@ -728,7 +748,7 @@ void LCD_symbol(char code, uint8_t width, uint8_t height, inverse_type inverse)
     if (heightf == 0)
     {
 //      mask = 0b00000000000000000000000011111111;
-			mask = 0x0000000F;
+			mask = 0x000000FF;
     }
     else
     {
@@ -753,19 +773,24 @@ void LCD_symbol(char code, uint8_t width, uint8_t height, inverse_type inverse)
 //    uint8_t buf[] = { 0b10001011 };
 //    I2C_WrBuf(0x70, buf, sizeof(buf));
 		uint8_t buf = SET_RAM_ADDR_CTRL(WRAP_AROUND,INC_PAGE_FIRST,PAGE_INC_DIR_NORMAL);
-		I2C_WrBuf(0x70, &buf, sizeof(buf));
+		I2C_WrBuf(LcdCmd, &buf, sizeof(buf));
 		
   }
 
   {
 //    uint8_t buff[] = { buf & 0xff, (buf >> 8) & 0xff, (buf >> 16) & 0xff, (buf >> 24) & 0xff };
-		uint8_t buff[4]
-    I2C_WrBuf(0x70 | 2, buff, sizeof(buf));
+		uint8_t buff[4];
+		buff[0] = buf & 0xff;
+		buff[1] = (buf >> 8) & 0xff;
+		buff[2] = (buf >> 16) & 0xff;
+		buff[3] = (buf >> 24) & 0xff;
+    I2C_WrBuf(LcdData, buff, sizeof(buf));
   }
 
   {
-    uint8_t buf[] = { 0b10001001 };
-    I2C_WrBuf(0x70, buf, sizeof(buf));
+//    uint8_t buf[] = { 0b10001001 };
+		uint8_t buf = SET_RAM_ADDR_CTRL(WRAP_AROUND,INC_COL_FIRST,PAGE_INC_DIR_NORMAL);
+    I2C_WrBuf(LcdCmd, &buf, sizeof(buf));
   }
 
 }
@@ -777,17 +802,28 @@ void LCD_symbol(char code, uint8_t width, uint8_t height, inverse_type inverse)
  */
 void LCD_cursor(uint8_t x, uint8_t y)
 {
+	uint8_t lcdBuffer[3] = {0};
   cursorY = y;
   cursorX = x;
-  if ((y / 8) == 0)
+
+/*
+	if ((y / 8) == 0)
     y = (y / 8);
   else
     y = (y / 8) - 1;
-  {
-    // setup page, Set Column Address LSB,  Set Column Address MSB
+
+// setup page, Set Column Address LSB,  Set Column Address MSB
     uint8_t buf[] = { 0b10110000 | y, x & 0b00001111, (x >> 4) | 0b00010000 };
-    I2C_WrBuf(0x70, buf, sizeof(buf));
-  }
+		I2C_WrBuf(0x70, buf, sizeof(buf));
+*/
+
+	y = (y>>3) ? (y>>3)-1 : y>>3;
+		
+	lcdBuffer[0] = SET_PAGE_ADDR(y);
+	lcdBuffer[1] = SET_COL_ADDR_LSB(x & 0x0f);
+	lcdBuffer[2] = SET_COL_ADDR_MSB(x>>4);
+	I2C_WrBuf(LcdCmd, lcdBuffer, sizeof(lcdBuffer));
+
 }
 
 // знакогенератор CP1251

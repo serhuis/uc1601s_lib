@@ -55,7 +55,8 @@ typedef enum  {
 } font_type;
 
 void LCD_init (void);
-void LCD_clear(uint8_t type);
+void LCD_fill(uint8_t type);
+void LCD_clear(void);
 void LCD_cursor(uint8_t x,uint8_t y);
 void LCD_symbol(char code, uint8_t width, uint8_t height, inverse_type inverse);
 void LCD_string(char *str, uint8_t x,  uint8_t y, font_type font, inverse_type inverse);
