@@ -76,9 +76,9 @@ enum _lcd_datatype
 #define SET_DISPL_ENABLE		0xAF
 
 //set mapping control
-#define	SET_MAPPING_CONTROL(MX, MY)	(0xC | MX | MY)
-#define MIRROR_X						0x20		
-#define MIRROR_Y						0x40
+#define	SET_MAPPING_CONTROL(MX, MY)	(0xC0 | MX | MY)
+#define MIRROR_X						0x02		
+#define MIRROR_Y						0x04
 
 //Systen reset
 #define SYSTEM_RESET			0xE2
@@ -113,7 +113,7 @@ void LCD_init(void)
   {
 	//    uint8_t buf[] = { b11100010 }; //System Reset
 		uint8_t buf[] = { SYSTEM_RESET }; //System Reset
-    I2C_WrBuf(0x70, buf, sizeof(buf));
+    I2C_WrBuf(LcdCmd, buf, sizeof(buf));
   }
   tool_delay_ms(10); // 1ms - 10ms
 
@@ -135,7 +135,7 @@ void LCD_init(void)
   {
     // same as for LCD154 but with Mirror X SEG/Column sequence inversion OFF
 //    uint8_t buf[] = { 0b11101011, 0b10000001, 120, 0b11000000, 0b10101111 };
-		lcdBuff[0] = SET_BIAS_RATIO_9;
+		lcdBuff[0] = SET_BIAS_RATIO_6;
 		lcdBuff[1] = SET_BIAS_POT;
 		lcdBuff[2] = 120;
 		lcdBuff[3] = SET_MAPPING_CONTROL(0, 0);
@@ -177,30 +177,10 @@ void LCD_fill(uint8_t type)
 	
   I2C_WrBuf(LcdCmd, lcdBuff, sizeof(lcdBuff));
 
-  if (type == 0)
+  lcdBuff[0] = type;
+  for (j = 0; j < 1056; j++)
   {
-    lcdBuff[0] = 0;
-    for (j = 0; j < 1056; j++)
-    {
-      I2C_WrBuf(LcdData, lcdBuff, 0);
-    }
-  }
-  else if (type == 1)
-  {
-    lcdBuff[0] = 0xFF;
-    for (j = 0; j < 1056; j++)
-    {
-      I2C_WrBuf(LcdData, lcdBuff, 1);
-    }
-  }
-  else
-  {
-    lcdBuff[0] = 0xAA;
-		lcdBuff[1] = 0x55;
-    for (j = 0; j < 528; j++)
-    {
-      I2C_WrBuf(LcdData, lcdBuff, 2);
-    }
+    I2C_WrBuf(LcdData, lcdBuff, 0);
   }
 }
 
@@ -243,7 +223,7 @@ void LCD_pixel(uint8_t pixel_type, uint8_t x, uint8_t y)
   // set cursor again (it was moved during reading)
   // setup page, Set Column Address LSB,  Set Column Address MSB
 	//    uint8_t buf[] = { 0b10110000 | page_num, x & 0b00001111, (x >> 4) | 0b00010000 };
-  lcdBuff[0] =  SET_PAGE_ADDR(page_num);
+  lcdBuff[0] = SET_PAGE_ADDR(page_num);
 	lcdBuff[1] = SET_COL_ADDR_LSB(x & 0x0f);
 	lcdBuff[2] = SET_COL_ADDR_MSB(x >> 4);
 		
@@ -707,7 +687,7 @@ void LCD_symbol(char code, uint8_t width, uint8_t height, inverse_type inverse)
   {
 //    uint8_t buf[] = { 0b10001011 }; // move by page +
 		uint8_t buf[] = { SET_RAM_ADDR_CTRL(WRAP_AROUND,INC_PAGE_FIRST,PAGE_INC_DIR_NORMAL) }; // move by page +
-    I2C_WrBuf(0x70, buf, sizeof(buf));
+    I2C_WrBuf(LcdCmd, buf, sizeof(buf));
   }
 
   {

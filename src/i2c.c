@@ -91,7 +91,7 @@ uint32_t I2C_WrBuf(uint8_t DataCmd, uint8_t *buf, uint32_t cnt) {
 
   //Send I2C device Address
 //  I2C_Addr(DevAddr, I2C_Direction_Transmitter);
-	I2C_Addr(0x70 | DataCmd, I2C_Direction_Transmitter);
+	I2C_Addr(0x70|DataCmd, I2C_Direction_Transmitter);
   //Unstretch the clock by just reading SR2 (Physically the clock is continued to be strectehed because we have not written anything to the DR yet.)
   (void) I2Cx->SR2;
 
@@ -167,12 +167,12 @@ uint32_t I2C_RdBufEasy (uint8_t DevAddr, uint8_t *buf, uint32_t cnt) {
  * @param cnt
  * @return
  */
-uint32_t I2C_RdBuf (uint8_t DevAddr, uint8_t *buf, uint32_t cnt) {
+uint32_t I2C_RdBuf (uint8_t DataCmd, uint8_t *buf, uint32_t cnt) {
   //Generate Start
   I2C_Start();
 
   //Send I2C Device Address
-  I2C_Addr(DevAddr, I2C_Direction_Receiver);
+  I2C_Addr(0x70|DataCmd, I2C_Direction_Receiver);
 
   if (cnt==1) {//We are going to read only 1 byte
     //Before Clearing Addr bit by reading SR2, we have to cancel ack.
@@ -364,8 +364,8 @@ static uint32_t WaitSR1FlagsSet (uint32_t Flags) {
 
   while(((I2Cx->SR1) & Flags) != Flags) {
     if (!(TimeOut--)) {
-    	while(1); //todo
-    	// panic(Flags, "I2C Error\n");
+//    	while(1); //todo
+    	//panic(Flags, "I2C Error\n");
       return 1;
     }
   }

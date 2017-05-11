@@ -35,30 +35,35 @@ void TIM2_IRQHandler(void) {
   TIM_ClearITPendingBit(TIM2, TIM_SR_UIF );
 
   // Some LCD demonstrations
-  LCD_clear();
+
   switch (i++ % 7) {
     case 0:
-      LCD_string("10x15", 0, 0, FONT_TYPE_10x15, INVERSE_TYPE_NOINVERSE);
+			LCD_clear();
+			LCD_string("Hello world!", 0, 64, FONT_TYPE_10x15, INVERSE_TYPE_NOINVERSE);
       break;
     case 1:
-      LCD_string("5x8", 0, 0, FONT_TYPE_5x8, INVERSE_TYPE_NOINVERSE);
+			LCD_clear();
+      LCD_string("Hello world!", 0, 56, FONT_TYPE_5x8, INVERSE_TYPE_NOINVERSE);
       break;
     case 2:
-      LCD_string("5x15", 0, 0, FONT_TYPE_5x15, INVERSE_TYPE_NOINVERSE);
+			LCD_clear();
+      LCD_string("Hello world!", 0, 48, FONT_TYPE_5x15, INVERSE_TYPE_NOINVERSE);
       break;
     case 3:
-      LCD_string("10x8", 0, 0, FONT_TYPE_10x8, INVERSE_TYPE_NOINVERSE);
+			LCD_clear();
+      LCD_string("Hello world!", 0, 40, FONT_TYPE_10x8, INVERSE_TYPE_NOINVERSE);
       break;
     case 4: {
-      char *string = "5x8i";
-      LCD_rect(LINE_TYPE_BLACK, ANGLE_TYPE_ROUNDED, 1, FILL_TYPE_BLACK, 8, 8,
-          tool_strlen(string) * 6 + 5, 13); //tool_strlen(string) * 6 + 5 - calculate rect width for place str
-      LCD_string("5x8i", 10, 10, FONT_TYPE_5x8, INVERSE_TYPE_INVERSE);
+      char *string = "Hello world!";
+			LCD_clear();
+      LCD_rect(LINE_TYPE_BLACK, ANGLE_TYPE_ROUNDED, 1, FILL_TYPE_GRAY, 8, 8,100, 15); //tool_strlen(string) * 6 + 5 - calculate rect width for place str
+//      LCD_string("Hello world!", 10, 10, FONT_TYPE_5x8, INVERSE_TYPE_INVERSE);
       break;
     }
     case 5:
-      LCD_rect(LINE_TYPE_BLACK, ANGLE_TYPE_RECT, 1, FILL_TYPE_TRANSPARENT, 2, 2,
-          20, 10);
+			LCD_clear();
+      LCD_rect(LINE_TYPE_BLACK, ANGLE_TYPE_RECT, 1, FILL_TYPE_TRANSPARENT, 0, 0,
+          132, 64);
       LCD_rect(LINE_TYPE_BLACK, ANGLE_TYPE_ROUNDED, 1, FILL_TYPE_TRANSPARENT, 8,
           8, 20, 10);
       LCD_rect(LINE_TYPE_DOT, ANGLE_TYPE_RECT, 1, FILL_TYPE_WHITE, 14, 14, 20,
@@ -68,8 +73,8 @@ void TIM2_IRQHandler(void) {
       break;
     case 6: {
       uint8_t j;
-      for (j = 0; j <= LCD_WIDTH; j = j + 3) {
-        LCD_line(LINE_TYPE_BLACK, j, 0, j, LCD_HEIGHT - 1);
+      for (j = 0; j < LCD_WIDTH; j+=3) {
+        LCD_line(LINE_TYPE_DOT, j, 0, j, LCD_HEIGHT - 1);
       }
       break;
     }

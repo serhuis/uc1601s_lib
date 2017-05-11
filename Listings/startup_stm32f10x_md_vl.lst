@@ -480,13 +480,13 @@ ARM Macro Assembler    Page 8
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=.\objects\startup_stm32f10x_md_vl.d -o.\objects\startup_stm32f10x_
-md_vl.o -IE:\MY_Proj\STM32_uc1601s\RTE -IE:\MY_Proj\STM32_uc1601s\RTE\Device\ST
-M32F100RB -Id:\Keil_v5\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include -Id:\Keil_v5\ARM\
-PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include -Id:\Keil_v5\ARM\PACK\Keil\STM32F1
-xx_DFP\2.1.0\Device\StdPeriph_Driver\inc -Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_D
-FP\2.1.0\RTE_Driver --predefine="__UVISION_VERSION SETA 520" --predefine="_RTE_
- SETA 1" --predefine="STM32F10X_MD_VL SETA 1" --list=.\listings\startup_stm32f1
-0x_md_vl.lst RTE\Device\STM32F100RB\startup_stm32f10x_md_vl.s
+md_vl.o -ID:\proj\STM32_lcd_uc1601s\RTE -ID:\proj\STM32_lcd_uc1601s\RTE\Device\
+STM32F100RB -Id:\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include -Id:\Keil_v5\AR
+M\PACK\Keil\STM32F1xx_DFP\2.1.0\Device\Include -Id:\Keil_v5\ARM\PACK\Keil\STM32
+F1xx_DFP\2.1.0\Device\StdPeriph_Driver\inc --predefine="__UVISION_VERSION SETA 
+520" --predefine="_RTE_ SETA 1" --predefine="STM32F10X_MD_VL SETA 1" --list=.\l
+istings\startup_stm32f10x_md_vl.lst RTE\Device\STM32F100RB\startup_stm32f10x_md
+_vl.s
 
 
 

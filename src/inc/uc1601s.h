@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 // select your display
-//#define LCD154
+#define LCD154
 //#define LCD077
-#define LCD120
+//#define LCD120
 
 #ifdef LCD154 //132-64
   #define LCD_WIDTH 132
